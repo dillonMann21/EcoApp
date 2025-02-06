@@ -1,4 +1,5 @@
-﻿using Spring2025_Samples.Models;
+﻿using Library.eCommerce.Services;
+using Spring2025_Samples.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,14 +47,15 @@ namespace Library.eCommerce.Services
         }
 
         public List<Product?> Products { get; private set; }
-
-
+        
+        public Dictionary<int, int> Quantities {get; set}
         public Product AddOrUpdate(Product product)
         {
             if(product.Id == 0)
             {
                 product.Id = LastKey + 1;
                 Products.Add(product);
+                ++product.InventoryAmount;
             }
 
 
@@ -69,11 +71,15 @@ namespace Library.eCommerce.Services
 
             Product? product = Products.FirstOrDefault(p => p.Id == id);
             Products.Remove(product);
+            --product.InventoryAmount;
+
 
             return product;
+        }
+        public Product GetAmount(Product product) {
+            return product.InventoryAmount;
         }
 
     }
 
-    
 }
